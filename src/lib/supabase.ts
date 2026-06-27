@@ -5,28 +5,6 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-export type Database = {
-  public: {
-    Tables: {
-      matches: {
-        Row: Match
-        Insert: Omit<Match, 'id'>
-        Update: Partial<Match>
-      }
-      predictions: {
-        Row: Prediction
-        Insert: Omit<Prediction, 'id' | 'created_at'>
-        Update: Partial<Prediction>
-      }
-      profiles: {
-        Row: Profile
-        Insert: Omit<Profile, 'created_at'>
-        Update: Partial<Profile>
-      }
-    }
-  }
-}
-
 export type Match = {
   id: number
   team_a: string
@@ -36,11 +14,11 @@ export type Match = {
   stage: 'r32' | 'r16' | 'qf' | 'sf' | 'third' | 'final'
   group_name?: string
   match_number: number
-  kickoff_time: string // ISO string
+  kickoff_time: string
   result_a?: number | null
   result_b?: number | null
-  winner?: string | null // team name or 'draw'
-  penalty_winner?: string | null // only for knockout
+  winner?: string | null
+  penalty_winner?: string | null
   status: 'upcoming' | 'locked' | 'finished'
 }
 
@@ -50,8 +28,9 @@ export type Prediction = {
   match_id: number
   pred_a: number
   pred_b: number
-  pred_winner?: string | null // for knockout: who wins after pens
+  pred_winner?: string | null
   points_earned?: number | null
+  was_changed?: boolean
   created_at: string
   updated_at?: string
 }
