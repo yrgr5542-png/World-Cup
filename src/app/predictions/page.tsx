@@ -98,7 +98,6 @@ export default function PredictionsPage() {
   }, [userId, matches, predictions])
 
   const stageMatches = matches.filter(m => m.stage === activeStage)
-  const visibleMatches = stageMatches
 
   if (loading) {
     return (
@@ -115,19 +114,16 @@ export default function PredictionsPage() {
         <h1 className="font-display text-3xl text-white mb-1">توقعاتك</h1>
         <p className="text-slate-500 text-sm mb-6">احفظ توقعاتك قبل بداية كل ماتش</p>
 
-        <div className="flex gap-2 overflow-x-auto pb-2 mb-4 scrollbar-hide">
+        <div className="flex gap-2 overflow-x-auto pb-2 mb-4">
           {STAGE_ORDER.map(stage => {
-            const stageCount = matches.filter(m => m.stage === stage).length
-            if (stageCount === 0) return null
+            const count = matches.filter(m => m.stage === stage).length
+            if (count === 0) return null
             return (
-              <button
-                key={stage}
-                onClick={() => setActiveStage(stage)}
+              <button key={stage} onClick={() => setActiveStage(stage)}
                 className={`flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition-colors
                   ${activeStage === stage
                     ? 'bg-gold-500 text-pitch-900'
-                    : 'bg-pitch-800 text-slate-400 hover:text-white border border-pitch-700'}`}
-              >
+                    : 'bg-pitch-800 text-slate-400 hover:text-white border border-pitch-700'}`}>
                 {STAGE_LABELS[stage]}
               </button>
             )
@@ -135,7 +131,7 @@ export default function PredictionsPage() {
         </div>
 
         <div className="space-y-3">
-          {visibleMatches.map(match => (
+          {stageMatches.map(match => (
             <MatchCard
               key={match.id}
               match={match}
@@ -144,9 +140,9 @@ export default function PredictionsPage() {
               wasChanged={changedPredictions.has(match.id)}
             />
           ))}
-          {visibleMatches.length === 0 && (
+          {stageMatches.length === 0 && (
             <div className="text-center py-16 text-slate-600">
-              <p>الماتشات دي هتظهر بعد ما الدور السابق يخلص</p>
+              <p>مفيش ماتشات في الدور ده</p>
             </div>
           )}
         </div>
